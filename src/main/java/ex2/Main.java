@@ -9,7 +9,8 @@ public class Main {
         ht.put("1", "lol");
         ht.put("2", "lol2");
 
-        System.out.println(ht.toString());
+        System.out.println(ht.getCollisionsForKey("1", 5));
+        System.out.println(ht.getCollisionsForKey("2", 5));
     }
 
 }

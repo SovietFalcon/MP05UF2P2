@@ -37,7 +37,7 @@ class HashTableTest {
         ht = new HashTable();
 
         ht.put("1", "test1");
-        assertEquals("1", ht.toString());
+        assertEquals(1, ht.toString());
 
 
         //Inserir un element que no col·lisiona dins una taula no vuida.

@@ -1,7 +1,9 @@
-package ex2;
+package ex4;
 
 // Original source code: https://gist.github.com/amadamala/3cdd53cb5a6b1c1df540981ab0245479
 // Modified by Fernando Porrino Serrano for academic purposes.
+
+import ex3.Main;
 
 import java.util.ArrayList;
 
@@ -9,7 +11,7 @@ import java.util.ArrayList;
  * Implementació d'una taula de hash sense col·lisions.
  * Original source code: https://gist.github.com/amadamala/3cdd53cb5a6b1c1df540981ab0245479
  */
-public class HashTable {
+public class HashTable extends Main {
     private int SIZE = 16;
     private int ITEMS = 0;
     private HashEntry[] entries = new HashEntry[SIZE];
@@ -27,7 +29,7 @@ public class HashTable {
      * @param key La clau de l'element a afegir.
      * @param value El propi element que es vol afegir.
      */
-    public void put(String key, String value) {
+    public void put(String key, Object value) {
         int hash = getHash(key);
         final HashEntry hashEntry = new HashEntry(key, value);
 
@@ -53,16 +55,22 @@ public class HashTable {
     public String get(String key) {
         int hash = getHash(key);
         if(entries[hash] != null) {
-            HashEntry temp = entries[hash];
+            HashEntry temp = getHashEntry(key, entries[hash]);
 
-            while( !temp.key.equals(key))
-                temp = temp.next;
-
-            return temp.value;
+            return temp.value.toString();
 
         }
 
         return null;
+    }
+
+    private HashEntry getHashEntry(String key, HashEntry entry) {  //EXTRACCIÓ DE MÈTODE
+        HashEntry temp = entry;
+
+        while( !temp.key.equals(key))
+            temp = temp.next;
+
+        return temp;
     }
 
     /**
@@ -73,9 +81,7 @@ public class HashTable {
         int hash = getHash(key);
         if(entries[hash] != null) {
 
-            HashEntry temp = entries[hash];
-            while( !temp.key.equals(key))
-                temp = temp.next;
+            HashEntry temp = this.getHashEntry(key, entries[hash]);
 
             if(temp.prev == null) entries[hash] = null;             //esborrar element únic (no col·lissió)
             else{
@@ -94,13 +100,13 @@ public class HashTable {
 
     private class HashEntry {
         String key;
-        String value;
+        Object value;
 
         // Linked list of same hash entries.
         HashEntry next;
         HashEntry prev;
 
-        public HashEntry(String key, String value) {
+        public HashEntry(String key, Object value) {
             this.key = key;
             this.value = value;
             this.next = null;
@@ -211,21 +217,6 @@ public class HashTable {
         }
 
         return  foundKeys;
-    }
-
-    public static void main(String[] args) {
-        HashTable hashTable = new HashTable();
-        
-        // Put some key values.
-        for(int i=0; i<30; i++) {
-            final String key = String.valueOf(i);
-            hashTable.put(key, key);
-        }
-
-        // Print the HashTable structure
-        log("****   HashTable  ***");
-        log(hashTable.toString());
-        log("\nValue for key(20) : " + hashTable.get("20") );
     }
 
     private static void log(String msg) {
